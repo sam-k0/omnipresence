@@ -1,0 +1,14 @@
+# depslib dependency file v1.0
+1644852732 source:e:\code__blocks\projects\proclooplist\main.cpp
+	<windows.h>
+	"gms.h"
+	<psapi.h>
+	<list>
+	<string>
+	<algorithm>
+
+1644844580 e:\code__blocks\projects\proclooplist\gms.h
+	<string>
+	<string.h>
+	<iostream>
+
