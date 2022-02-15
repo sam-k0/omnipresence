@@ -36,6 +36,8 @@
 
 /* Define extern export for GameMaker */
 #define gmx extern "C" __declspec(dllexport)
+/* Define Callback */
+//#define regcb
 
 /* Define GameMaker Booleans */
 #define gmtrue 1.0;
@@ -104,4 +106,33 @@ private:
     */
     gmu(){}
 };
+
+
+#ifdef regcb // This is GM DLL export specific. We do not need this.
+/* Register Callback */
+const int EVENT_OTHER_SOCIAL = 70;
+
+// defines function pointers for the DS map creation
+void (*CreateAsynEventWithDSMap)(int, int) = NULL;
+int (*CreateDsMap)(int _num, ...) = NULL;
+bool (*DsMapAddDouble)(int _index, const char* _pKey, double value) = NULL;
+bool (*DsMapAddString)(int _index, const char* _pKey, const char* pVal) = NULL;
+
+/**
+* @brief Registers Callbacks for GameMaker API
+*/
+gmx void RegisterCallbacks(char* arg1, char* arg2, char* arg3, char* arg4) {
+    void (*CreateAsynEventWithDSMapPtr)(int, int) = (void (*)(int, int))(arg1);
+    int(*CreateDsMapPtr)(int _num, ...) = (int(*)(int _num, ...)) (arg2);
+    CreateAsynEventWithDSMap = CreateAsynEventWithDSMapPtr;
+    CreateDsMap = CreateDsMapPtr;
+
+    bool (*DsMapAddDoublePtr)(int _index, const char* _pKey, double value) = (bool(*)(int,  const char*, double))(arg3);
+    bool (*DsMapAddStringPtr)(int _index, const char* _pKey, const char* pVal) = (bool(*)(int, const char*, const char*))(arg4);
+
+    DsMapAddDouble = DsMapAddDoublePtr;
+    DsMapAddString = DsMapAddStringPtr;
+}
+#endif // regcb
+
 #endif // AMOGUS_H_INCLUDED

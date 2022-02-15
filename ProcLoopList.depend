@@ -1,14 +1,34 @@
 # depslib dependency file v1.0
-1644852732 source:e:\code__blocks\projects\proclooplist\main.cpp
+1644922991 source:e:\code__blocks\projects\proclooplist\main.cpp
+	"processfunctions.h"
+	"myconfig.h"
+	"rpcinvoke.h"
+	"rpcpreferences.h"
+	<unistd.h>
+
+1644914683 e:\code__blocks\projects\proclooplist\gms.h
+	<string>
+	<string.h>
+	<iostream>
+
+1644914899 e:\code__blocks\projects\proclooplist\processfunctions.h
+	<iostream>
+	<stdio.h>
 	<windows.h>
 	"gms.h"
 	<psapi.h>
 	<list>
 	<string>
-	<algorithm>
+	"myconfig.h"
 
-1644844580 e:\code__blocks\projects\proclooplist\gms.h
-	<string>
-	<string.h>
+1644914018 e:\code__blocks\projects\proclooplist\myconfig.h
+
+1644921624 e:\code__blocks\projects\proclooplist\rpcinvoke.h
+	"gms.h"
+	<windows.h>
 	<iostream>
+
+1644923233 e:\code__blocks\projects\proclooplist\rpcpreferences.h
+	<vector>
+	<string>
 
