@@ -1,6 +1,7 @@
 #ifndef RPCPREFERENCES_H_INCLUDED
 #define RPCPREFERENCES_H_INCLUDED
 #include <vector>
+#include <fstream>
 #include <string>
 using namespace std;
 
@@ -22,6 +23,8 @@ struct rpcPref
         icon = ico;
     }
 
+    rpcPref(){}
+
 };
 
 /**
@@ -42,6 +45,76 @@ vector<rpcPref*>* initPresences()
     prefVec->push_back(pref2);
     prefVec->push_back(pref3);
     return prefVec;
+}
+
+void loadPresences(vector<rpcPref*>* pvec, string filepath)
+{
+    char buffer[500];
+    ifstream source;
+    source.open(filepath.c_str(), ios::in);
+
+    if(!source)
+    {
+        return;
+    }
+
+    int currmode = 0;
+
+    std::string path = "";
+    std::string displayName = "";
+    std::string appid = "";
+    int priority = -99;
+    std::string icon = "";
+
+    rpcPref* cur;
+
+    while(source.getline(buffer, 499))
+    {
+        if(source.eof())
+        {
+            source.close();
+            return;
+        }
+
+        if(currmode == 0)
+        {
+            cur = new rpcPref();
+            path = buffer;
+        }
+        else if(currmode == 1)
+        {
+             displayName = buffer;
+        }
+        else if(currmode == 2)
+        {
+            appid = buffer;
+        }
+        else if(currmode == 3)
+        {
+             std::string priostr = buffer;
+                priority = std::stoi(priostr);
+        }
+        else if(currmode == 4)
+        {
+            icon = buffer;
+
+            cur->path = path;
+            cur->displayName = displayName;
+            cur->appid = appid;
+            cur->priority = priority;
+            cur->icon = icon;
+
+            pvec->push_back(cur);
+        }
+
+        currmode = currmode % 5;
+    }
+
+    cout << "Readptr: "<<currmode<<endl;
+    if(currmode != 0)
+    {
+        delete cur;
+    }
 }
 
 /**
