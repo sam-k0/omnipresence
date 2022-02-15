@@ -94,6 +94,7 @@ void checksetpresence(std::list<pInfo*>* listPInfos, std::vector<rpcPref*>* pref
 int main()
 {
 
+
     if(!checkConnectionWrapped()) // Check module connection
     {
         // Connection loss

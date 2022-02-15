@@ -52,69 +52,59 @@ void loadPresences(vector<rpcPref*>* pvec, string filepath)
     char buffer[500];
     ifstream source;
     source.open(filepath.c_str(), ios::in);
-
+    cout << "1"<<endl;
     if(!source)
     {
         return;
+        cout << "2"<<endl;
     }
 
     int currmode = 0;
 
-    std::string path = "";
-    std::string displayName = "";
-    std::string appid = "";
-    int priority = -99;
-    std::string icon = "";
+    std::string _path = "";
+    std::string _displayName = "";
+    std::string _appid = "";
+    int _priority = -99;
+    std::string _icon = "";
 
-    rpcPref* cur;
 
     while(source.getline(buffer, 499))
     {
+        cout << "sus" << endl;
+        cout << buffer << endl;
         if(source.eof())
         {
             source.close();
             return;
         }
 
-        if(currmode == 0)
+        switch(currmode)
         {
-            cur = new rpcPref();
-            path = buffer;
-        }
-        else if(currmode == 1)
-        {
-             displayName = buffer;
-        }
-        else if(currmode == 2)
-        {
-            appid = buffer;
-        }
-        else if(currmode == 3)
-        {
-             std::string priostr = buffer;
-                priority = std::stoi(priostr);
-        }
-        else if(currmode == 4)
-        {
-            icon = buffer;
+            case 0:
+                _path = buffer;
+                currmode ++;
+                break;
 
-            cur->path = path;
-            cur->displayName = displayName;
-            cur->appid = appid;
-            cur->priority = priority;
-            cur->icon = icon;
-
-            pvec->push_back(cur);
+            case 1:
+                _displayName = buffer;
+                currmode ++;
+                break;
+            case 2:
+                _appid = buffer;
+                currmode ++;
+                break;
+            case 4:
+                _priority = std::stoi(string(buffer));
+                currmode ++;
+                break;
+            case 5:
+                currmode = 0;
+                pvec->push_back(new rpcPref(_path, _displayName, _appid,_priority, _icon));
+                break;
         }
-
-        currmode = currmode % 5;
     }
-
-    cout << "Readptr: "<<currmode<<endl;
-    if(currmode != 0)
-    {
-        delete cur;
-    }
+    source.close();
+    cout << "sss"<<endl;
 }
 
 /**

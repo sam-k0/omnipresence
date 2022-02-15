@@ -29,6 +29,7 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
+					<Add option="-lpsapi" />
 				</Linker>
 			</Target>
 		</Build>
