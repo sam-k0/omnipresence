@@ -33,13 +33,14 @@ vector<rpcPref*>* initPresences()
     vector<rpcPref*>* prefVec = new vector<rpcPref*>;
 
     // Create a Preference
-    rpcPref* pref = new rpcPref("E:\\Code__Blocks\\CodeBlocks\\codeblocks.exe","Code::Blocks","576668163350200321", 99, "logo160");
-    rpcPref* pref2 = new rpcPref("E:\\Notepad++\\notepad++.exe","Notepad++","662720961979744297", 100, "bhlogo_discord_large");
+    rpcPref* pref = new rpcPref("E:\\Code__Blocks\\CodeBlocks\\codeblocks.exe","Editing Code","576668163350200321", 1, "logo160");
+    rpcPref* pref2 = new rpcPref("E:\\Notepad++\\notepad++.exe","Notepad++","662720961979744297", 2, "bhlogo_discord_large");
+    rpcPref* pref3 = new rpcPref("C:\\Users\\kooba\\AppData\\Roaming\\GameMaker-Studio\\5piceIDE.exe","Using GMS 1.4","821056056003919924", 3, "electron");
 
     // Add to vector
     prefVec->push_back(pref);
     prefVec->push_back(pref2);
-
+    prefVec->push_back(pref3);
     return prefVec;
 }
 
@@ -53,6 +54,20 @@ void destroyPresencesVec(vector<rpcPref*>* v)
         delete v->at(i);
     }
     delete v;
+}
+
+/**
+*   @brief Sets the presence to a struct rpcPref
+*/
+void setPresenceWrapped(rpcPref* p)
+{
+    gmrpc_init(gmu::string_to_constcharptr(p->appid));
+
+    const char* state = gmu::string_to_constcharptr(p->displayName);
+    const char* details = "omnipresence";
+    const char* largeImage = gmu::string_to_constcharptr(p->icon);
+
+    gmrpc_setPresence(state, details, "", largeImage);
 }
 
 #endif // RPCPREFERENCES_H_INCLUDED

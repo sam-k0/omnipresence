@@ -40,4 +40,5 @@ bool checkConnectionWrapped()
     }
     return true;
 }
+
 #endif // RPCINVOKE_H_INCLUDED

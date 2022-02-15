@@ -7,12 +7,18 @@
 #include "rpcinvoke.h"
 #include "rpcpreferences.h"
 #include <unistd.h>
+#include <ctime>
 using namespace std;
 
 std::list<pInfo*> listPInfos; // The list to hold pInfos
 std::vector<rpcPref*>* prefVec; // Holds all rpcPrefs
 rpcPref* currSetPres = nullptr; // The current set presence
 
+
+
+/**
+* @brief Loops all processes and preferenced Presences to determine which presence to set next
+*/
 void checksetpresence(std::list<pInfo*>* listPInfos, std::vector<rpcPref*>* prefVec )
 {
     cout << prefVec->size() << " preferences found."<<endl;
@@ -55,15 +61,8 @@ void checksetpresence(std::list<pInfo*>* listPInfos, std::vector<rpcPref*>* pref
         cout << "Case 1: CurrSet is NONE! Next will be: "<< nextPref->displayName<<endl;
         // Set the presence
         currSetPres = nextPref;
-        gmrpc_init(gmu::string_to_constcharptr(currSetPres->appid));
-
-        //while(!gmrpc_get_ready());
-
-        const char* state = gmu::string_to_constcharptr(currSetPres->displayName);
-        const char* details = gmu::string_to_constcharptr(currSetPres->displayName);
-        const char* largeImage = gmu::string_to_constcharptr(currSetPres->icon);
-
-        gmrpc_setPresence(state, details, largeImage, largeImage);
+        // Using wrapper
+        setPresenceWrapped(currSetPres);
     }
     else if(nextPref == nullptr) // All pref procs closed
     {
@@ -83,19 +82,7 @@ void checksetpresence(std::list<pInfo*>* listPInfos, std::vector<rpcPref*>* pref
         {
             gmrpc_exit();
             // Set the presence
-            //while(gmrpc_get_ready()); // Wait for disconnect
-
-            gmrpc_init(gmu::string_to_constcharptr(currSetPres->appid));
-
-            //while(!gmrpc_get_ready()) // wait for connect
-            {
-                cout << "Waiting for GMRPC..."<<endl;
-            }
-
-            const char* state = gmu::string_to_constcharptr(currSetPres->displayName);
-            const char* details = gmu::string_to_constcharptr(currSetPres->displayName);
-            const char* largeImage = gmu::string_to_constcharptr(currSetPres->icon);
-            gmrpc_setPresence(state, details, largeImage, largeImage);
+            setPresenceWrapped(currSetPres);
         }
     }
     else if(currSetPres == nextPref)
@@ -106,6 +93,7 @@ void checksetpresence(std::list<pInfo*>* listPInfos, std::vector<rpcPref*>* pref
 
 int main()
 {
+
     if(!checkConnectionWrapped()) // Check module connection
     {
         // Connection loss
@@ -114,7 +102,7 @@ int main()
         return -1;
     }
 
-    /// Init preferences
+    /// Init Presences TODO: Add file reading to read presences
     prefVec = initPresences();
 
     while(true)
@@ -127,19 +115,15 @@ int main()
         {
             // Loop all preferences to check and set presence on rpc
             checksetpresence(&listPInfos, prefVec);
-
-            /*for (auto const& i : listPInfos)
-            {
-                std::cout << "------"<< std::endl;
-                std::cout << i->path << std::endl;
-                std::cout << i->path.size() << std::endl;
-            }*/
         }
         else
         {
             printf("Error.");
         }
-        sleep(3);
+        // Wait n seconds because rate limit of discord
+        clock_t start = clock();
+        while(clock() - start <= CLOCKS_PER_SEC*3);
+
     }
     // Cleanup
     destroyPresencesVec(prefVec);
