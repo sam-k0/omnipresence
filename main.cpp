@@ -93,7 +93,19 @@ void checksetpresence(std::list<pInfo*>* listPInfos, std::vector<rpcPref*>* pref
 
 int main()
 {
+    ///SUSSY SHIT
+    cout << "Proceed to load."<<endl;
+    // Get Directory
+    char* _buf;
+    _buf = _getcwd(NULL, 0);
+    string __buf = string(_buf);
+    __buf = __buf + "\\" + "GMRPC.dll";
+    const char* GMRPCDLLPATH = __buf.c_str();
+    cout << GMRPCDLLPATH<<endl;
+    system("pause");
+    /// END SUSSY SHIT
 
+    loadGMRPC();
 
     if(!checkConnectionWrapped()) // Check module connection
     {

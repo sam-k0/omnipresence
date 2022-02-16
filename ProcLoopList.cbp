@@ -26,17 +26,36 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="-mthreads" />
+					<Add option="-fmessage-length=0" />
+					<Add option="-fexceptions" />
+					<Add option="-fident" />
+					<Add option="-DWIN32" />
+					<Add option="-D_WINDOWS" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
 					<Add option="-lpsapi" />
+					<Add option="-static-libstdc++" />
+					<Add option="-static-libgcc" />
+					<Add option="-Wl,--enable-auto-image-base" />
+					<Add option="-Wl,--add-stdcall-alias" />
+					<Add option="-Wl,--enable-auto-import" />
 				</Linker>
 			</Target>
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
+			<Add option="-m32" />
 			<Add option="-fexceptions" />
+			<Add directory="C:/mingw/MinGW/bin" />
 		</Compiler>
+		<Linker>
+			<Add option="-static-libstdc++" />
+			<Add option="-static-libgcc" />
+			<Add option="-m32" />
+			<Add directory="C:/mingw/MinGW/bin" />
+		</Linker>
 		<Unit filename="gms.h">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
