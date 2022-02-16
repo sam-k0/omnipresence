@@ -154,8 +154,10 @@ int main(int argc, char* argv[])
             printf("Error.");
         }
         // Wait n seconds because rate limit of discord
-        clock_t start = clock();
-        while(clock() - start <= CLOCKS_PER_SEC*3);
+        /*clock_t start = clock();
+        while(clock() - start <= CLOCKS_PER_SEC*3);*/
+
+        sleep(3); // more efficient
 
     }
     // Cleanup

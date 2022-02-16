@@ -9,7 +9,7 @@ typedef struct{
     bool valid;
 } pInfo;
 
-const double APPVERSION = 1.0;
+const double APPVERSION = 1.1;
 
 
 

@@ -64,6 +64,8 @@
 			<Add option="-lpsapi" />
 			<Add directory="C:/mingw/MinGW/bin" />
 		</Linker>
+		<Unit filename="discord-files/discord_register.h" />
+		<Unit filename="discord-files/discord_rpc.h" />
 		<Unit filename="gms.h">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
