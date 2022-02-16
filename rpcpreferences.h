@@ -106,6 +106,12 @@ vector<rpcPref*>* loadPresences()
         filebuffer == "";
         std::getline (myfile, filebuffer);
         cout << filebuffer<< endl;
+        // COMMENTS!!!!
+        if(filebuffer[0] == '#')
+        {
+            continue;
+        }
+
 
         switch(readpos)
         {
