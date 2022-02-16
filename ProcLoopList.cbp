@@ -13,10 +13,17 @@
 				<Option compiler="gcc" />
 				<Option use_console_runner="0" />
 				<Compiler>
+					<Add option="-m32" />
 					<Add option="-g" />
 				</Compiler>
 				<Linker>
+					<Add option="-static-libstdc++" />
+					<Add option="-static-libgcc" />
+					<Add option="-static" />
+					<Add option="-m32" />
 					<Add option="-lpsapi" />
+					<Add library="lib/discord-rpc.lib" />
+					<Add directory="lib" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -54,6 +61,7 @@
 			<Add option="-static-libstdc++" />
 			<Add option="-static-libgcc" />
 			<Add option="-m32" />
+			<Add option="-lpsapi" />
 			<Add directory="C:/mingw/MinGW/bin" />
 		</Linker>
 		<Unit filename="gms.h">

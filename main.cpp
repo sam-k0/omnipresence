@@ -15,7 +15,6 @@ std::vector<rpcPref*>* prefVec; // Holds all rpcPrefs
 rpcPref* currSetPres = nullptr; // The current set presence
 
 
-
 /**
 * @brief Loops all processes and preferenced Presences to determine which presence to set next
 */
@@ -67,10 +66,9 @@ void checksetpresence(std::list<pInfo*>* listPInfos, std::vector<rpcPref*>* pref
     else if(nextPref == nullptr) // All pref procs closed
     {
         cout << "Case 2: Next Presence is NONE!"<< endl;
-        //if(gmrpc_get_ready())
-        //{
+
         gmrpc_exit();
-        //}
+
         currSetPres = nullptr;
     }
     else if(currSetPres != nextPref) // A different than current
@@ -93,28 +91,6 @@ void checksetpresence(std::list<pInfo*>* listPInfos, std::vector<rpcPref*>* pref
 
 int main()
 {
-    ///SUSSY SHIT
-    cout << "Proceed to load."<<endl;
-    // Get Directory
-    char* _buf;
-    _buf = _getcwd(NULL, 0);
-    string __buf = string(_buf);
-    __buf = __buf + "\\" + "GMRPC.dll";
-    const char* GMRPCDLLPATH = __buf.c_str();
-    cout << GMRPCDLLPATH<<endl;
-    system("pause");
-    /// END SUSSY SHIT
-
-    loadGMRPC();
-
-    if(!checkConnectionWrapped()) // Check module connection
-    {
-        // Connection loss
-        printf("Terminating Program.");
-        system("pause");
-        return -1;
-    }
-
     /// Init Presences TODO: Add file reading to read presences
     prefVec = initPresences();
 
@@ -142,6 +118,10 @@ int main()
     destroyPresencesVec(prefVec);
     return 0;
 }
+
+
+
+
 
 
 
