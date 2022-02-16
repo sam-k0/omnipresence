@@ -58,18 +58,25 @@ pInfo* getProcessInformation(DWORD pid)
 
     if(procHandle == NULL) // Error opening procHandle
     {
+        #ifdef __USE_DEBUG_MODE__
         printf("Failed to open process handle to process %lu \n",pid);
+        #endif // __USE_DEBUG_MODE__
         return processInformation;
+
     }
 
     // Try resolving the filepath and write to filename from handle
     if(GetModuleFileNameEx(procHandle, NULL, filename, MAX_PATH) == 0)
     {
+        #ifdef __USE_DEBUG_MODE__
         std::cout << "Failed to getModuleFilename" << std::endl;
+        #endif // __USE_DEBUG_MODE__
     }
     else
     {
+        #ifdef __USE_DEBUG_MODE__
         std::cout << "Module filename is "<<filename<< std::endl;
+        #endif // __USE_DEBUG_MODE__
         // Convert strings
         processInformation->path = filename;
         processInformation->valid = true;
@@ -129,8 +136,9 @@ int getPInfosList(std::list<pInfo*> *pInfoList)
             {
                 delete myPInfo;
             }
-
+            #ifdef __USE_DEBUG_MODE__
             std::cout << "Process ID: " << dwProcessID << std::endl;
+            #endif // __USE_DEBUG_MODE__
         }
     }
     else

@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1645022105 source:e:\code__blocks\projects\proclooplist\main.cpp
+1645025518 source:e:\code__blocks\projects\proclooplist\main.cpp
 	"processfunctions.h"
 	"myconfig.h"
 	"rpcinvoke.h"
@@ -12,7 +12,7 @@
 	<string.h>
 	<iostream>
 
-1644914899 e:\code__blocks\projects\proclooplist\processfunctions.h
+1645024611 e:\code__blocks\projects\proclooplist\processfunctions.h
 	<iostream>
 	<stdio.h>
 	<windows.h>
@@ -22,7 +22,7 @@
 	<string>
 	"myconfig.h"
 
-1644914018 e:\code__blocks\projects\proclooplist\myconfig.h
+1645025131 e:\code__blocks\projects\proclooplist\myconfig.h
 
 1645022016 e:\code__blocks\projects\proclooplist\rpcinvoke.h
 	"gms.h"
@@ -32,10 +32,11 @@
 	"discord-files/discord_register.h"
 	"discord-files/discord_rpc.h"
 
-1644950568 e:\code__blocks\projects\proclooplist\rpcpreferences.h
+1645025573 e:\code__blocks\projects\proclooplist\rpcpreferences.h
 	<vector>
 	<fstream>
 	<string>
+	"myconfig.h"
 
 1640340760 e:\code__blocks\projects\proclooplist\discord-files\discord_register.h
 

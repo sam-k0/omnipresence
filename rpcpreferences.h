@@ -3,6 +3,7 @@
 #include <vector>
 #include <fstream>
 #include <string>
+#include "myconfig.h"
 using namespace std;
 
 
@@ -28,7 +29,7 @@ struct rpcPref
 };
 
 /**
-*  @brief Initializes Vector and presences
+*  @brief Initializes Vector and presences with dummies !DO NOT USE IN DEPLOY!
 */
 vector<rpcPref*>* initPresences()
 {
@@ -47,64 +48,96 @@ vector<rpcPref*>* initPresences()
     return prefVec;
 }
 
-void loadPresences(vector<rpcPref*>* pvec, string filepath)
+string getCurrentDir() // Returns EXE directory
 {
-    char buffer[500];
-    ifstream source;
-    source.open(filepath.c_str(), ios::in);
-    cout << "1"<<endl;
-    if(!source)
+    /*
+    https://stackoverflow.com/questions/143174/how-do-i-get-the-directory-that-a-program-is-running-from
+    */
+
+    // get working directory
+    char cCurrentPath[FILENAME_MAX]; // Buffer
+
+    if (!_getcwd(cCurrentPath, sizeof(cCurrentPath)))
     {
-        return;
-        cout << "2"<<endl;
+        //showErr("Could not get current directory", "Something went wrong.");
+        exit(-1);
     }
 
-    int currmode = 0;
+    cCurrentPath[sizeof(cCurrentPath) - 1] = '\0'; /* not really required */
 
-    std::string _path = "";
-    std::string _displayName = "";
-    std::string _appid = "";
-    int _priority = -99;
-    std::string _icon = "";
+    //printf("The current working directory is %s\n", cCurrentPath);
+    char* s = cCurrentPath;
+    return string(s);
+}
 
 
-    while(source.getline(buffer, 499))
+vector<rpcPref*>* loadPresences()
+{
+    std::string target = getCurrentDir() + "\\pref.txt";
+    cout << "Loading from "<< target<<endl;
+
+    // File streaming
+    std::ifstream myfile;
+    myfile.open(target);
+
+    std::string filebuffer; // the str to read to
+
+    if(!myfile.is_open()) // Err catching
     {
-        cout << "sus" << endl;
-        cout << buffer << endl;
-        if(source.eof())
-        {
-            source.close();
-            return;
-        }
+        cout << "Could not find preferences file at:" << target << endl;
+        system("pause");
+        exit(-1);
+    }
 
-        switch(currmode)
-        {
-            case 0:
-                _path = buffer;
-                currmode ++;
-                break;
 
-            case 1:
-                _displayName = buffer;
-                currmode ++;
-                break;
-            case 2:
-                _appid = buffer;
-                currmode ++;
-                break;
-            case 4:
-                _priority = std::stoi(string(buffer));
-                currmode ++;
-                break;
-            case 5:
-                currmode = 0;
-                pvec->push_back(new rpcPref(_path, _displayName, _appid,_priority, _icon));
-                break;
+    int readpos = 0; // Checks what to read next
+    // The buffers to read to
+    std::string __path = "";
+    std::string __status = "";
+    std::string __appid = "";
+    int __prio = 0;
+    std::string __icon = "";
+    // The prefVec
+    vector<rpcPref*>* pVecLoaded = new vector<rpcPref*>;
+
+
+    while(myfile.good())// Loop the contents
+    {
+        filebuffer == "";
+        std::getline (myfile, filebuffer);
+        cout << filebuffer<< endl;
+
+        switch(readpos)
+        {
+        case 0:
+            __path = filebuffer;
+            readpos ++;
+            break;
+
+        case 1:
+            __status = filebuffer;
+            readpos ++;
+            break;
+
+        case 2:
+            __appid = filebuffer;
+            readpos ++;
+            break;
+
+        case 3:
+            __prio = std::stoi(filebuffer);
+            readpos ++;
+            break;
+
+        case 4:
+            __icon = filebuffer;
+            pVecLoaded->push_back(new rpcPref(__path, __status, __appid, __prio, __icon));
+            readpos = 0;
+            break;
         }
     }
-    source.close();
-    cout << "sss"<<endl;
+    cout << "Reader ended with : " << readpos << endl;
+    return pVecLoaded;
 }
 
 /**
@@ -127,7 +160,7 @@ void setPresenceWrapped(rpcPref* p)
     gmrpc_init(gmu::string_to_constcharptr(p->appid));
 
     const char* state = gmu::string_to_constcharptr(p->displayName);
-    const char* details = "omnipresence";
+    const char* details = "Using Omnipresence";
     const char* largeImage = gmu::string_to_constcharptr(p->icon);
 
     gmrpc_setPresence(state, details, "", largeImage);

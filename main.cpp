@@ -14,6 +14,35 @@ std::list<pInfo*> listPInfos; // The list to hold pInfos
 std::vector<rpcPref*>* prefVec; // Holds all rpcPrefs
 rpcPref* currSetPres = nullptr; // The current set presence
 
+/**
+* @brief Show welcome message
+*/
+void showWelcome()
+{
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, 15);
+    cout << "----------------------------------------\n";
+    cout << "Welcome to Omnipresence "<< APPVERSION << ".0 by Sam-k0."<<endl;
+    cout << "This project is on ";
+    SetConsoleTextAttribute(hConsole, 11);
+    cout << "GitHub: https://github.com/sam-k0/omnipresence"<<endl;
+    SetConsoleTextAttribute(hConsole, 15);
+    cout << "----------------------------------------\n";
+    cout << "Make sure to configure your own presences via ";
+    SetConsoleTextAttribute(hConsole, 11);
+    cout << "pref.txt";
+    SetConsoleTextAttribute(hConsole, 15);
+    cout << " configuration file!"<<endl;
+    cout << "----------- DEBUG OUTPUT -----------\n";
+}
+
+/**
+* @brief Clear terminal
+*/
+void Clear()
+{
+    system("cls");
+}
 
 /**
 * @brief Loops all processes and preferenced Presences to determine which presence to set next
@@ -35,7 +64,9 @@ void checksetpresence(std::list<pInfo*>* listPInfos, std::vector<rpcPref*>* pref
 
     for (auto iter : *prefVec) // Loop all configured presences
     {
+        #ifdef __USE_DEBUG_MODE__
         cout << "prefloop! "<<endl;
+        #endif // __USE_DEBUG_MODE__
 
         if(iter->priority > currPresPrio )   // Comp prios
         {
@@ -57,7 +88,7 @@ void checksetpresence(std::list<pInfo*>* listPInfos, std::vector<rpcPref*>* pref
 
     if(currSetPres == nullptr && nextPref != nullptr) // The first time a pref was found / app launch
     {
-        cout << "Case 1: CurrSet is NONE! Next will be: "<< nextPref->displayName<<endl;
+        cout << "(1) Current Presence is NONE! Next will be: "<< nextPref->displayName<<endl;
         // Set the presence
         currSetPres = nextPref;
         // Using wrapper
@@ -65,7 +96,7 @@ void checksetpresence(std::list<pInfo*>* listPInfos, std::vector<rpcPref*>* pref
     }
     else if(nextPref == nullptr) // All pref procs closed
     {
-        cout << "Case 2: Next Presence is NONE!"<< endl;
+        cout << "(2) Next Presence is NONE!"<< endl;
 
         gmrpc_exit();
 
@@ -73,7 +104,7 @@ void checksetpresence(std::list<pInfo*>* listPInfos, std::vector<rpcPref*>* pref
     }
     else if(currSetPres != nextPref) // A different than current
     {
-        cout << "Case 3: CurrSet is "<< currSetPres->displayName <<" Next will be different: "<< nextPref->displayName<<endl;
+        cout << "(3) Current Presence is "<< currSetPres->displayName <<" Next will be different: "<< nextPref->displayName<<endl;
         currSetPres = nextPref;
 
         if(currSetPres != nullptr)
@@ -85,17 +116,30 @@ void checksetpresence(std::list<pInfo*>* listPInfos, std::vector<rpcPref*>* pref
     }
     else if(currSetPres == nextPref)
     {
-        cout << "Case 4: Did not find any other or more important presence."<<endl;
+        cout << "(4) Did not find any other or more important presence."<<endl;
     }
 }
 
-int main()
+int main(int argc, char* argv[])
 {
-    /// Init Presences TODO: Add file reading to read presences
-    prefVec = initPresences();
+    #ifdef __USE_DEBUG_MODE__
+    cout << "Enumerating Startup args: (unused)"<<endl;
+    for(int i = 0; i < argc; i++)
+    {
+        cout << argv[i]<<endl;
+    }
+    #endif // __USE_DEBUG_MODE__
+
+
+    /// Init Presences
+    //prefVec = initPresences();
+    //destroyPresencesVec(prefVec);
+    prefVec = loadPresences();
 
     while(true)
     {
+        Clear();
+        showWelcome();
         // clear list
         clearProcList(&listPInfos);
 
